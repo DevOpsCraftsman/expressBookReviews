@@ -4,6 +4,8 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+// Helper function
+const present = obj => JSON.stringify(obj, null, 4)
 
 public_users.post("/register", (req,res) => {
   //Write your code here
@@ -13,21 +15,20 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify(books, null, 4))
+  res.send(present(books))
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify(books[req.params.isbn], null, 4))
+  res.send(present(books[req.params.isbn]))
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify({
-    booksbyauthor: Object.values(books).filter(b => b.author === req.params.author)
-  }, null, 4))
+  const booksbyauthor = Object.values(books).filter(b => b.author === req.params.author)
+  res.send(present({ booksbyauthor }))
 });
 
 // Get all books based on title
